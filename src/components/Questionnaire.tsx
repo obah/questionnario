@@ -1,26 +1,18 @@
 import { IQuestion } from "../../types";
-import { generateRandomNumbers } from "../../lib/utils";
 import { questions } from "../../lib/constants";
 import { Button, OptionButton } from "./ui/Button";
-import { Dispatch, useEffect, useState } from "react";
+import { Dispatch, useState } from "react";
 
 interface Props {
+  questionNumbers: number[];
   score: number | null;
   scoreHandler: Dispatch<React.SetStateAction<number | null>>;
 }
 
-export function Questionnaire({ scoreHandler, score }: Props) {
+export function Questionnaire({ questionNumbers, scoreHandler, score }: Props) {
   const [questionIndex, setQuestionIndex] = useState<number>(0);
   const [totalScore, setTotalScore] = useState<number>(0);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
-  const [questionSet, setQuestionSet] = useState<number[]>([]);
-
-  useEffect(() => {
-    const randomNumbers = generateRandomNumbers({ size: 3, min: 1, max: 30 });
-
-    setQuestionSet(randomNumbers);
-    console.log(questionSet);
-  }, []);
 
   const handleNextClick = () => {
     if (selectedAnswers[questionIndex] === correctAnswer) {
@@ -43,7 +35,7 @@ export function Questionnaire({ scoreHandler, score }: Props) {
   };
 
   const { question, answers, correctAnswer }: IQuestion =
-    questions[questionSet[questionIndex]];
+    questions[questionNumbers[questionIndex]];
 
   return (
     <>
@@ -69,11 +61,14 @@ export function Questionnaire({ scoreHandler, score }: Props) {
           </div>
 
           <div className="flex items-center justify-between">
-            <Button onClick={() => setQuestionIndex(questionIndex - 1)}>
+            <Button
+              onClick={() => setQuestionIndex(questionIndex - 1)}
+              disabled={questionIndex < 2}
+            >
               Back
             </Button>
 
-            {questionIndex === 9 ? (
+            {questionIndex === questionNumbers.length - 1 ? (
               <Button onClick={handleSubmitClick}>Submit</Button>
             ) : (
               <Button onClick={handleNextClick}>Next</Button>
