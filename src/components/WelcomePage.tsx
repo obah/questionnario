@@ -20,10 +20,10 @@ export function WelcomePage({ inputHandler, startHandler }: Props) {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center space-y-10">
       <Input
         name="username"
-        placeholder="Enter your user name"
+        placeholder="Enter your username"
         value={username}
         onChange={handleNameInput}
         required

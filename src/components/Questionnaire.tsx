@@ -1,6 +1,6 @@
 import { IQuestion } from "../../types";
 import { questions } from "../../lib/constants";
-import { Button, OptionButton } from "./ui/Button";
+import { Button } from "./ui/Button";
 import { Dispatch, useState } from "react";
 
 interface Props {
@@ -37,30 +37,34 @@ export function Questionnaire({ questionNumbers, scoreHandler, score }: Props) {
   const { question, answers, correctAnswer }: IQuestion =
     questions[questionNumbers[questionIndex]];
 
+  const totalQuestionNumber = questionNumbers.length;
+
   return (
     <>
       {score ? (
-        <p>You scored: {score}</p>
+        <p className="text-5xl font-medium">
+          You scored: {score} / {totalQuestionNumber}
+        </p>
       ) : (
         <div>
           <p>{question}</p>
-          <div>
+          <div className="flex gap-5">
             {answers.map((answer) => (
-              <OptionButton
+              <Button
                 key={answer}
                 onClick={() => handleAnswerClick(answer)}
                 className={
                   answer === selectedAnswers[questionIndex]
-                    ? "bg-red-400"
-                    : "bg-blue-400"
+                    ? "bg-emerald-500"
+                    : "bg-white text-black"
                 }
               >
                 {answer}
-              </OptionButton>
+              </Button>
             ))}
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="mt-10 flex items-center justify-between">
             <Button
               onClick={() => setQuestionIndex(questionIndex - 1)}
               disabled={questionIndex < 2}
@@ -68,7 +72,7 @@ export function Questionnaire({ questionNumbers, scoreHandler, score }: Props) {
               Back
             </Button>
 
-            {questionIndex === questionNumbers.length - 1 ? (
+            {questionIndex === totalQuestionNumber - 1 ? (
               <Button onClick={handleSubmitClick}>Submit</Button>
             ) : (
               <Button onClick={handleNextClick}>Next</Button>

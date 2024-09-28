@@ -4,3 +4,9 @@ export interface IQuestion {
   answers: string[];
   correctAnswer: string;
 }
+
+export interface IRandomNumbers {
+  size: number;
+  min: number;
+  max: number;
+}
